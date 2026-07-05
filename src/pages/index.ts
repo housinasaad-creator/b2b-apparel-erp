@@ -1,0 +1,10 @@
+export { Dashboard } from './Dashboard';
+export { OEEModule } from './OEEModule';
+export { EnhancedOEE } from './EnhancedOEE';
+export { Manufacturing } from './Manufacturing';
+export { Inventory } from './Inventory';
+export { EnhancedInventory } from './EnhancedInventory';
+export { Settings } from './Settings';
+export { Login } from './Login';
+export { UserManagement } from './UserManagement';
+export { Reports } from './Reports';
