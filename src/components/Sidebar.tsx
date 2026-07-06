@@ -51,10 +51,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onNavigate }) => {
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
               <img
-                src={`${process.env.PUBLIC_URL}/sewing-machine-logo.png`}
+                src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
                 alt="شركة النسيج الذهبي"
                 className="w-9 h-9 object-contain"
-                style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
             <div>

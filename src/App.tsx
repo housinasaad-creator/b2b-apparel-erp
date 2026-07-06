@@ -59,10 +59,9 @@ function AppContent() {
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <img
-                  src={`${process.env.PUBLIC_URL}/sewing-machine-logo.png`}
+                  src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
                   alt="شركة النسيج الذهبي"
                   className="w-7 h-7 object-contain"
-                  style={{ filter: 'brightness(0) invert(1)' }}
                 />
               </div>
               <div>

@@ -43,10 +43,9 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full mb-4 shadow-2xl border-4 border-amber-400/30">
             <img
-              src={`${process.env.PUBLIC_URL}/sewing-machine-logo.png`}
+              src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
               alt="شركة النسيج الذهبي"
               className="w-16 h-16 object-contain"
-              style={{ filter: 'brightness(0) invert(1)' }}
             />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">شركة النسيج الذهبي</h1>
