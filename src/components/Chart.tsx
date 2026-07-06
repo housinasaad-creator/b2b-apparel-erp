@@ -18,6 +18,7 @@ interface ChartProps {
   data: ChartData[];
   type?: 'line' | 'bar';
   dataKeys?: string[];
+  labels?: { [key: string]: string };
 }
 
 export const Chart: React.FC<ChartProps> = ({
@@ -25,6 +26,7 @@ export const Chart: React.FC<ChartProps> = ({
   data,
   type = 'line',
   dataKeys = ['value'],
+  labels = {},
 }) => {
   const colors = ['#6366f1', '#a855f7', '#ec4899', '#f97316'];
 
@@ -52,6 +54,7 @@ export const Chart: React.FC<ChartProps> = ({
                 key={key}
                 type="monotone"
                 dataKey={key}
+                name={labels[key] || key}
                 stroke={colors[idx % colors.length]}
                 strokeWidth={3}
                 dot={{ r: 5 }}
@@ -77,6 +80,7 @@ export const Chart: React.FC<ChartProps> = ({
               <Bar
                 key={key}
                 dataKey={key}
+                name={labels[key] || key}
                 fill={colors[idx % colors.length]}
                 radius={[8, 8, 0, 0]}
               />

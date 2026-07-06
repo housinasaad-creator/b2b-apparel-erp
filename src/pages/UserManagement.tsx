@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Header, Modal } from '../components';
 import { User } from '../types';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 interface UserFormData {
   name: string;
@@ -13,6 +14,7 @@ interface UserFormData {
 }
 
 export const UserManagement: React.FC = () => {
+  const { t, td } = useI18n();
   const [users, setUsers] = useState<User[]>([
     {
       id: '1',
@@ -56,12 +58,12 @@ export const UserManagement: React.FC = () => {
 
   const handleAddUser = () => {
     if (!formData.name || !formData.username || !formData.password) {
-      alert('الرجاء ملء جميع الحقول المطلوبة');
+      alert(t('fillRequired'));
       return;
     }
 
     if (formData.role === 'staff' && !formData.machineNumber) {
-      alert('الرجاء تحديد رقم الماكينة للموظف');
+      alert(t('specifyMachine'));
       return;
     }
 
@@ -85,13 +87,13 @@ export const UserManagement: React.FC = () => {
       department: '',
     });
     setShowAddUser(false);
-    alert('تم إنشاء المستخدم بنجاح!');
+    alert(t('userCreated'));
   };
 
   const handleDeleteUser = (userId: string) => {
-    if (window.confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
+    if (window.confirm(t('deleteUserConfirm'))) {
       setUsers(users.filter((u) => u.id !== userId));
-      alert('تم حذف المستخدم!');
+      alert(t('userDeleted'));
     }
   };
 
@@ -116,36 +118,44 @@ export const UserManagement: React.FC = () => {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'المدير العام';
+        return t('roleAdmin');
       case 'manager':
-        return 'مشرف الإنتاج';
+        return t('roleManager');
       case 'staff':
-        return 'موظف العمليات';
+        return t('roleStaff');
       default:
-        return 'مستخدم';
+        return t('roleStaff');
     }
   };
 
+  const deptDisplay = (dep: string) =>
+    dep.startsWith('ماكينة ') ? `${t('machinePrefix')} ${dep.slice(7)}` : td(dep);
+
+  const displayName = (u: User) =>
+    ['admin', 'manager', 'staff'].includes(u.role) && ['المدير العام', 'مشرف الإنتاج', 'موظف العمليات'].includes(u.name)
+      ? td(u.name)
+      : u.name;
+
   return (
     <div className="space-y-8">
-      <Header title="⚙️ إدارة المستخدمين والمفاتيح" />
+      <Header title={t('usersTitle')} />
 
-      <div className="px-8 py-6 space-y-6">
+      <div className="px-4 sm:px-8 py-6 space-y-6">
         {/* Search Bar */}
-        <div className="flex gap-4 items-center justify-between">
+        <div className="flex flex-wrap gap-4 items-center justify-between">
           <input
             type="text"
-            placeholder="ابحث عن مستخدم..."
+            placeholder={t('searchUser')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="flex-1 min-w-40 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
           <button
             onClick={() => setShowAddUser(true)}
-            className="px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all font-bold flex items-center gap-2"
+            className="px-6 py-2 bg-gradient-to-r from-amber-500 to-yellow-600 text-white rounded-lg hover:shadow-lg transition-all font-bold flex items-center gap-2"
           >
             <Plus size={20} />
-            إضافة مستخدم جديد
+            {t('addUserBtn')}
           </button>
         </div>
 
@@ -154,15 +164,15 @@ export const UserManagement: React.FC = () => {
           {filteredUsers.map((user) => (
             <div
               key={user.id}
-              className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-pink-600 hover:shadow-xl transition-all"
+              className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-amber-600 hover:shadow-xl transition-all"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span className="text-4xl">{getRoleIcon(user.role)}</span>
                   <div className="flex-1">
-                    <h3 className="font-bold text-slate-900">{user.name}</h3>
-                    <span className="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full inline-block mt-1">
+                    <h3 className="font-bold text-slate-900">{displayName(user)}</h3>
+                    <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full inline-block mt-1">
                       {getRoleLabel(user.role)}
                     </span>
                   </div>
@@ -172,19 +182,19 @@ export const UserManagement: React.FC = () => {
               {/* Details */}
               <div className="space-y-2 mb-4 bg-slate-50 rounded-lg p-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">اسم المستخدم:</span>
+                  <span className="text-slate-600">{t('username')}:</span>
                   <span className="font-bold text-slate-900">{user.email}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">كلمة المرور:</span>
+                  <span className="text-slate-600">{t('password')}:</span>
                   <span className="font-bold text-slate-900">••••••</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">القسم/الماكينة:</span>
-                  <span className="font-bold text-slate-900">{user.department}</span>
+                  <span className="text-slate-600">{t('deptMachine')}:</span>
+                  <span className="font-bold text-slate-900">{deptDisplay(user.department)}</span>
                 </div>
                 <div className="flex justify-between text-sm border-t pt-2">
-                  <span className="text-slate-600">تاريخ الإنشاء:</span>
+                  <span className="text-slate-600">{t('createdAtLabel')}:</span>
                   <span className="font-bold text-slate-900">{user.createdAt}</span>
                 </div>
               </div>
@@ -192,25 +202,25 @@ export const UserManagement: React.FC = () => {
               {/* Status Badge */}
               <div className="mb-4">
                 <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full inline-block">
-                  ✓ نشط
+                  ✓ {t('active')}
                 </span>
               </div>
 
               {/* Actions */}
               <div className="flex gap-2">
                 <button
-                  onClick={() => alert('قريباً: تعديل المستخدم')}
+                  onClick={() => alert(t('editSoon'))}
                   className="flex-1 py-2 px-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all font-bold text-sm flex items-center justify-center gap-2"
                 >
                   <Edit2 size={16} />
-                  تعديل
+                  {t('edit')}
                 </button>
                 <button
                   onClick={() => handleDeleteUser(user.id)}
                   className="flex-1 py-2 px-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all font-bold text-sm flex items-center justify-center gap-2"
                 >
                   <Trash2 size={16} />
-                  حذف
+                  {t('delete')}
                 </button>
               </div>
             </div>
@@ -220,15 +230,15 @@ export const UserManagement: React.FC = () => {
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t-2 border-slate-200">
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6">
-            <p className="text-sm opacity-90 mb-2">إجمالي المستخدمين</p>
+            <p className="text-sm opacity-90 mb-2">{t('totalUsers')}</p>
             <p className="text-4xl font-bold">{users.length}</p>
           </div>
           <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6">
-            <p className="text-sm opacity-90 mb-2">عدد الموظفين</p>
+            <p className="text-sm opacity-90 mb-2">{t('staffCount')}</p>
             <p className="text-4xl font-bold">{users.filter((u) => u.role === 'staff').length}</p>
           </div>
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6">
-            <p className="text-sm opacity-90 mb-2">المشرفون</p>
+            <p className="text-sm opacity-90 mb-2">{t('managersCount')}</p>
             <p className="text-4xl font-bold">{users.filter((u) => u.role === 'manager').length}</p>
           </div>
         </div>
@@ -239,55 +249,55 @@ export const UserManagement: React.FC = () => {
         <Modal
           isOpen={showAddUser}
           onClose={() => setShowAddUser(false)}
-          title="إنشاء مستخدم جديد"
+          title={t('createUserTitle')}
         >
           <div className="space-y-4">
             {/* Name Input */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                الاسم الكامل *
+                {t('fullName')} *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="مثل: أحمد محمد"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder={t('fullNamePlaceholder')}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
 
             {/* Username Input */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                اسم المستخدم *
+                {t('username')} *
               </label>
               <input
                 type="text"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                placeholder="مثل: ahmed123"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder={t('usernamePh2')}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
 
             {/* Password Input */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                كلمة المرور *
+                {t('password')} *
               </label>
               <input
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                placeholder="0000 أو كلمة قوية"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder={t('passwordPh2')}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
 
             {/* Role Selection */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                الدور *
+                {t('roleLabel')} *
               </label>
               <select
                 value={formData.role}
@@ -297,11 +307,11 @@ export const UserManagement: React.FC = () => {
                     role: e.target.value as 'admin' | 'manager' | 'staff',
                   })
                 }
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
-                <option value="staff">👷 موظف العمليات</option>
-                <option value="manager">📊 مشرف الإنتاج</option>
-                <option value="admin">👨‍💼 المدير العام</option>
+                <option value="staff">👷 {t('roleStaff')}</option>
+                <option value="manager">📊 {t('roleManager')}</option>
+                <option value="admin">👨‍💼 {t('roleAdmin')}</option>
               </select>
             </div>
 
@@ -309,14 +319,14 @@ export const UserManagement: React.FC = () => {
             {formData.role === 'staff' && (
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  رقم الماكينة * (للموظفين فقط)
+                  {t('machineNumLabel')}
                 </label>
                 <input
                   type="number"
                   value={formData.machineNumber || ''}
                   onChange={(e) => setFormData({ ...formData, machineNumber: e.target.value })}
-                  placeholder="مثل: 1 أو 2 أو 3"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  placeholder={t('machineNumPh')}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
             )}
@@ -325,14 +335,14 @@ export const UserManagement: React.FC = () => {
             {formData.role !== 'staff' && (
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  القسم
+                  {t('deptLabel')}
                 </label>
                 <input
                   type="text"
                   value={formData.department}
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                  placeholder="مثل: الإنتاج، الجودة، إلخ"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  placeholder={t('deptPh')}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
             )}
@@ -341,15 +351,15 @@ export const UserManagement: React.FC = () => {
             <div className="flex gap-3 pt-4">
               <button
                 onClick={handleAddUser}
-                className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 rounded-lg hover:shadow-lg transition-all font-bold"
+                className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-600 text-white py-2 rounded-lg hover:shadow-lg transition-all font-bold"
               >
-                ✅ إنشاء المستخدم
+                ✅ {t('createUserBtn')}
               </button>
               <button
                 onClick={() => setShowAddUser(false)}
                 className="flex-1 bg-slate-200 text-slate-900 py-2 rounded-lg hover:bg-slate-300 transition-all font-bold"
               >
-                ❌ إلغاء
+                ❌ {t('cancel')}
               </button>
             </div>
           </div>

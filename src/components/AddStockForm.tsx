@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { InventoryItem } from '../types';
+import { useI18n } from '../i18n';
 
 interface AddStockFormProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
   onClose,
   onSubmit,
 }) => {
+  const { t, td } = useI18n();
   const [name, setName] = useState('');
   const [category, setCategory] = useState(categories[0]);
   const [quantity, setQuantity] = useState(0);
@@ -33,7 +35,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
     e.preventDefault();
 
     if (!name || quantity <= 0 || unitCost <= 0) {
-      alert('يرجى ملء جميع الحقول بشكل صحيح');
+      alert(t('fillCorrectly'));
       return;
     }
 
@@ -76,11 +78,11 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
 
       {/* Modal */}
       <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md animate-scaleIn">
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md animate-scaleIn max-h-[90vh] overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-200">
-            <h2 className="text-2xl font-bold text-slate-900">
-              ➕ إضافة مادة جديدة للمخزون
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              ➕ {t('addStockTitle')}
             </h2>
             <button
               onClick={handleReset}
@@ -95,14 +97,14 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
             {/* Name */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                📝 اسم المادة *
+                📝 {t('materialNameLabel')} *
               </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="مثال: قماش قطني، خيط أحمر"
+                placeholder={t('materialNamePh')}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
@@ -110,7 +112,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
             {/* Category */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                📂 الفئة
+                📂 {t('categoryLabel')}
               </label>
               <select
                 value={category}
@@ -119,7 +121,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
               >
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
-                    {cat}
+                    {td(cat)}
                   </option>
                 ))}
               </select>
@@ -129,7 +131,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  📊 الكمية الحالية *
+                  📊 {t('currentQty')} *
                 </label>
                 <input
                   type="number"
@@ -143,18 +145,18 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  📦 الوحدة
+                  📦 {t('unitLabel')}
                 </label>
                 <select
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option>متر</option>
-                  <option>بكرة</option>
-                  <option>قطعة</option>
-                  <option>كيلو</option>
-                  <option>صندوق</option>
+                  <option value="متر">{t('unitMeter')}</option>
+                  <option value="بكرة">{t('unitSpool')}</option>
+                  <option value="قطعة">{t('unitPiece')}</option>
+                  <option value="كيلو">{t('unitKilo')}</option>
+                  <option value="صندوق">{t('unitBox')}</option>
                 </select>
               </div>
             </div>
@@ -163,7 +165,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  ⚠️ الحد الأدنى (اختياري)
+                  ⚠️ {t('minStockOptional')}
                 </label>
                 <input
                   type="number"
@@ -176,7 +178,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  🔄 إعادة الطلب (اختياري)
+                  🔄 {t('reorderOptional')}
                 </label>
                 <input
                   type="number"
@@ -191,7 +193,7 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
             {/* Unit Cost */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                💵 سعر الوحدة الواحدة *
+                💵 {t('unitCostLabel')} *
               </label>
               <div className="flex items-center gap-2">
                 <span className="text-lg font-bold text-slate-600">$</span>
@@ -209,16 +211,16 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
 
             {/* Summary */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border-2 border-blue-200">
-              <p className="text-sm text-blue-900 font-bold mb-2">📊 ملخص:</p>
+              <p className="text-sm text-blue-900 font-bold mb-2">📊 {t('summaryLabel')}</p>
               <div className="space-y-1 text-xs text-blue-800">
                 <p>
-                  • إجمالي القيمة: <span className="font-bold">${(quantity * unitCost).toFixed(2)}</span>
+                  • {t('sumTotalValue')}: <span className="font-bold">${(quantity * unitCost).toFixed(2)}</span>
                 </p>
                 <p>
-                  • الحد الأدنى: <span className="font-bold">{minStock || quantity / 2}</span>
+                  • {t('minStockLabel')}: <span className="font-bold">{minStock || quantity / 2}</span>
                 </p>
                 <p>
-                  • نقطة إعادة الطلب: <span className="font-bold">{reorderPoint || quantity}</span>
+                  • {t('sumReorder')}: <span className="font-bold">{reorderPoint || quantity}</span>
                 </p>
               </div>
             </div>
@@ -230,14 +232,14 @@ export const AddStockForm: React.FC<AddStockFormProps> = ({
                 className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:shadow-lg transition-all font-bold flex items-center justify-center gap-2"
               >
                 <Plus size={20} />
-                إضافة للمخزون
+                {t('addToInventory')}
               </button>
               <button
                 type="button"
                 onClick={handleReset}
                 className="flex-1 bg-slate-200 text-slate-900 py-3 rounded-lg hover:bg-slate-300 transition-all font-bold"
               >
-                إلغاء
+                {t('cancel')}
               </button>
             </div>
           </form>

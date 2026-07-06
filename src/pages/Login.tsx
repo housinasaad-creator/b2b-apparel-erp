@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { AlertCircle } from 'lucide-react';
+import { useI18n, LanguageSwitcher } from '../i18n';
 
 interface LoginProps {
   onLoginSuccess: () => void;
@@ -12,13 +13,14 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [error, setError] = useState('');
   const [showCredentials, setShowCredentials] = useState(false);
   const { login } = useAuth();
+  const { t } = useI18n();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     if (!username || !password) {
-      setError('الرجاء إدخال اسم المستخدم وكلمة المرور');
+      setError(t('errEmpty'));
       return;
     }
 
@@ -26,7 +28,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     if (success) {
       onLoginSuccess();
     } else {
-      setError('بيانات الدخول غير صحيحة');
+      setError(t('errInvalid'));
       setPassword('');
     }
   };
@@ -39,17 +41,22 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Language Switcher */}
+        <div className="flex justify-center mb-6">
+          <LanguageSwitcher />
+        </div>
+
         {/* Logo & Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full mb-4 shadow-2xl border-4 border-amber-400/30">
             <img
               src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
-              alt="شركة النسيج الذهبي"
+              alt={t('company')}
               className="w-16 h-16 object-contain"
             />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">شركة النسيج الذهبي</h1>
-          <p className="text-amber-200 text-lg">🧵 نظام إدارة الإنتاج المتقدم</p>
+          <h1 className="text-4xl font-bold text-white mb-2">{t('company')}</h1>
+          <p className="text-amber-200 text-lg">🧵 {t('loginSubtitle')}</p>
         </div>
 
         {/* Login Form */}
@@ -66,28 +73,28 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             {/* Username Input */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                اسم المستخدم
+                {t('username')}
               </label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="مثل: admin أو manager أو staff"
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
+                placeholder={t('usernamePlaceholder')}
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
               />
             </div>
 
             {/* Password Input */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                كلمة المرور
+                {t('password')}
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="كلمة المرور: 0000"
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
+                placeholder={t('passwordPlaceholder')}
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
               />
             </div>
 
@@ -96,7 +103,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               type="submit"
               className="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-600 text-white font-bold rounded-lg hover:shadow-lg transition-all active:scale-95"
             >
-              ✨ دخول النظام
+              ✨ {t('loginBtn')}
             </button>
           </form>
 
@@ -106,7 +113,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-slate-600">دخول سريع</span>
+              <span className="px-2 bg-white text-slate-600">{t('quickLogin')}</span>
             </div>
           </div>
 
@@ -117,21 +124,21 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               onClick={() => handleQuickLogin('admin', '0000')}
               className="w-full py-2 px-4 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-100 transition-all font-bold text-sm"
             >
-              👨‍💼 المدير العام (Admin)
+              👨‍💼 {t('roleAdmin')} (Admin)
             </button>
             <button
               type="button"
               onClick={() => handleQuickLogin('manager', '0000')}
               className="w-full py-2 px-4 bg-green-50 text-green-600 border border-green-200 rounded-lg hover:bg-green-100 transition-all font-bold text-sm"
             >
-              📊 مشرف الإنتاج (Manager)
+              📊 {t('roleManager')} (Manager)
             </button>
             <button
               type="button"
               onClick={() => handleQuickLogin('staff', '0000')}
               className="w-full py-2 px-4 bg-orange-50 text-orange-600 border border-orange-200 rounded-lg hover:bg-orange-100 transition-all font-bold text-sm"
             >
-              👷 موظف العمليات (Staff)
+              👷 {t('roleStaff')} (Staff)
             </button>
           </div>
 
@@ -142,36 +149,36 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               onClick={() => setShowCredentials(!showCredentials)}
               className="text-xs text-slate-600 hover:text-slate-900 underline"
             >
-              {showCredentials ? '▼ إخفاء بيانات الدخول' : '▶ عرض جميع بيانات الدخول'}
+              {showCredentials ? `▼ ${t('hideCreds')}` : `▶ ${t('showCreds')}`}
             </button>
             {showCredentials && (
               <div className="mt-3 p-4 bg-slate-50 rounded-lg text-xs space-y-2 text-slate-700">
                 <div>
-                  <strong>👨‍💼 المدير العام:</strong>
+                  <strong>👨‍💼 {t('roleAdmin')}:</strong>
                   <br />
-                  اسم المستخدم: admin
+                  {t('username')}: admin
                   <br />
-                  كلمة المرور: 0000
+                  {t('password')}: 0000
                   <br />
-                  الصلاحيات: جميع الميزات
+                  {t('permAll')}
                 </div>
                 <div className="border-t pt-2">
-                  <strong>📊 مشرف الإنتاج:</strong>
+                  <strong>📊 {t('roleManager')}:</strong>
                   <br />
-                  اسم المستخدم: manager
+                  {t('username')}: manager
                   <br />
-                  كلمة المرور: 0000
+                  {t('password')}: 0000
                   <br />
-                  الصلاحيات: إدارة متقدمة + الأسعار
+                  {t('permAdvanced')}
                 </div>
                 <div className="border-t pt-2">
-                  <strong>👷 موظف العمليات:</strong>
+                  <strong>👷 {t('roleStaff')}:</strong>
                   <br />
-                  اسم المستخدم: staff
+                  {t('username')}: staff
                   <br />
-                  كلمة المرور: 0000
+                  {t('password')}: 0000
                   <br />
-                  الصلاحيات: عرض فقط (بدون أسعار)
+                  {t('permViewOnly')}
                 </div>
               </div>
             )}
@@ -180,8 +187,8 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
         {/* Footer Info */}
         <div className="mt-8 text-center text-amber-200 text-sm">
-          <p>✨ شركة النسيج الذهبي</p>
-          <p>🧵 نظام إدارة محترف وآمن</p>
+          <p>✨ {t('company')}</p>
+          <p>🧵 {t('loginFooter')}</p>
         </div>
       </div>
     </div>

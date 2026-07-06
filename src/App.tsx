@@ -4,12 +4,14 @@ import { Dashboard, EnhancedOEE, Manufacturing, EnhancedInventory, Settings, Log
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Notification } from './types';
 import { initialAlerts } from './data';
+import { useI18n, LanguageSwitcher } from './i18n';
 import './App.css';
 
 type PageType = 'dashboard' | 'oee' | 'manufacturing' | 'inventory' | 'settings' | 'users' | 'reports';
 
 function AppContent() {
   const { isLoggedIn, user } = useAuth();
+  const { t } = useI18n();
   const [activePage, setActivePage] = useState<PageType>('dashboard');
   const [alerts, setAlerts] = useState<Notification[]>(initialAlerts);
 
@@ -55,33 +57,34 @@ function AppContent() {
       <main className="flex-1 lg:ml-64 overflow-y-auto">
         <div className="min-h-screen pb-12">
           {/* Top Bar with User Info & Alerts */}
-          <div className="sticky top-0 z-40 bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-600 text-white px-8 py-4 flex items-center justify-between shadow-lg">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+          <div className="sticky top-0 z-40 bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-600 text-white px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-2 shadow-lg pl-16 lg:pl-8">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                 <img
                   src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
-                  alt="شركة النسيج الذهبي"
+                  alt={t('company')}
                   className="w-7 h-7 object-contain"
                 />
               </div>
-              <div>
-                <p className="text-xs opacity-90">مرحباً بك في</p>
-                <p className="font-bold text-lg">شركة النسيج الذهبي</p>
+              <div className="hidden sm:block min-w-0">
+                <p className="text-xs opacity-90">{t('welcomeTo')}</p>
+                <p className="font-bold text-base sm:text-lg truncate">{t('company')}</p>
               </div>
-              <div className="border-l border-white/30 pl-4">
-                <p className="text-sm">{user?.name}</p>
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full inline-block">
+              <div className="border-r border-white/30 pr-3 min-w-0">
+                <p className="text-sm truncate">{user?.name}</p>
+                <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full inline-block whitespace-nowrap">
                   {user?.role === 'admin'
-                    ? '👨‍💼 المدير العام'
+                    ? `👨‍💼 ${t('roleAdmin')}`
                     : user?.role === 'manager'
-                    ? '📊 مشرف الإنتاج'
-                    : '👷 موظف العمليات'}
+                    ? `📊 ${t('roleManager')}`
+                    : `👷 ${t('roleStaff')}`}
                 </span>
               </div>
             </div>
 
             {/* Alerts Panel */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <LanguageSwitcher />
               <AlertPanel
                 alerts={alerts}
                 onMarkAsRead={handleMarkAsRead}
@@ -92,9 +95,9 @@ function AppContent() {
                   setActivePage('dashboard');
                   window.location.href = '/';
                 }}
-                className="text-xs px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all font-bold"
+                className="text-xs px-3 sm:px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all font-bold whitespace-nowrap"
               >
-                🚪 خروج
+                🚪 {t('logout')}
               </button>
             </div>
           </div>

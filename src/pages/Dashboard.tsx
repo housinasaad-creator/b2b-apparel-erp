@@ -1,22 +1,29 @@
 import React from 'react';
 import { Header, StatsCard, Chart } from '../components';
 import { dashboardStats, weeklyChartData } from '../data';
+import { useI18n } from '../i18n';
 
 export const Dashboard: React.FC = () => {
+  const { t, td } = useI18n();
+
+  // Translate weekday names on the X axis
+  const chartData = weeklyChartData.map((d) => ({ ...d, name: td(d.name) }));
+  const seriesLabels = { sales: t('seriesSales'), production: t('seriesProduction') };
+
   return (
     <div className="space-y-8">
-      <Header title="لوحة التحكم الرئيسية" />
+      <Header title={t('dashboardTitle')} />
 
       {/* Statistics Cards */}
-      <div className="px-8 py-6">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">الإحصائيات اليومية</h2>
+      <div className="px-4 sm:px-8 py-6">
+        <h2 className="text-2xl font-bold text-slate-900 mb-6">{t('dailyStats')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {dashboardStats.map((stat, idx) => (
             <StatsCard
               key={idx}
-              title={stat.title}
+              title={td(stat.title)}
               value={stat.value}
-              unit={stat.unit}
+              unit={stat.unit ? td(stat.unit) : undefined}
               icon={stat.icon}
               color={stat.color}
               trend={stat.trend}
@@ -26,52 +33,55 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="px-8 py-6 space-y-6">
+      <div className="px-4 sm:px-8 py-6 space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Sales Chart */}
           <Chart
-            title="حركة المبيعات الأسبوعية"
-            data={weeklyChartData}
+            title={t('salesWeekly')}
+            data={chartData}
             type="line"
             dataKeys={['sales']}
+            labels={seriesLabels}
           />
 
           {/* Production Chart */}
           <Chart
-            title="حركة الإنتاج الأسبوعية"
-            data={weeklyChartData}
+            title={t('productionWeekly')}
+            data={chartData}
             type="bar"
             dataKeys={['production']}
+            labels={seriesLabels}
           />
         </div>
 
         {/* Combined Chart */}
         <Chart
-          title="المبيعات مقابل الإنتاج (مقارنة أسبوعية)"
-          data={weeklyChartData}
+          title={t('salesVsProduction')}
+          data={chartData}
           type="line"
           dataKeys={['sales', 'production']}
+          labels={seriesLabels}
         />
       </div>
 
       {/* Quick Stats */}
-      <div className="px-8 py-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
-        <h3 className="text-lg font-bold text-slate-900 mb-4">ملخص سريع</h3>
+      <div className="px-4 sm:px-8 py-6 mx-4 sm:mx-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+        <h3 className="text-lg font-bold text-slate-900 mb-4">{t('quickSummary')}</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <p className="text-sm text-slate-600">معدل الإنتاجية</p>
+            <p className="text-sm text-slate-600">{t('productivity')}</p>
             <p className="text-2xl font-bold text-indigo-600">94%</p>
           </div>
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <p className="text-sm text-slate-600">الطلبيات المنجزة</p>
+            <p className="text-sm text-slate-600">{t('completedOrders')}</p>
             <p className="text-2xl font-bold text-green-600">85%</p>
           </div>
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <p className="text-sm text-slate-600">جودة المنتج</p>
+            <p className="text-sm text-slate-600">{t('productQuality')}</p>
             <p className="text-2xl font-bold text-purple-600">98%</p>
           </div>
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <p className="text-sm text-slate-600">توقت التسليم</p>
+            <p className="text-sm text-slate-600">{t('onTimeDelivery')}</p>
             <p className="text-2xl font-bold text-orange-600">92%</p>
           </div>
         </div>

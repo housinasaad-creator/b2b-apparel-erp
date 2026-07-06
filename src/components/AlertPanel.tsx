@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AlertCircle, X, Check } from 'lucide-react';
 import { Notification } from '../types';
+import { useI18n } from '../i18n';
 
 interface AlertPanelProps {
   alerts: Notification[];
@@ -9,6 +10,7 @@ interface AlertPanelProps {
 }
 
 export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, onDismiss }) => {
+  const { t, td } = useI18n();
   const unreadCount = alerts.filter((a) => !a.read).length;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -48,14 +50,14 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
     const diffMs = now.getTime() - alertTime.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return 'للتو';
-    if (diffMins < 60) return `قبل ${diffMins} دقيقة`;
+    if (diffMins < 1) return t('justNow');
+    if (diffMins < 60) return t('minAgo', { n: diffMins });
 
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `قبل ${diffHours} ساعة`;
+    if (diffHours < 24) return t('hourAgo', { n: diffHours });
 
     const diffDays = Math.floor(diffHours / 24);
-    return `قبل ${diffDays} يوم`;
+    return t('dayAgo', { n: diffDays });
   };
 
   return (
@@ -63,8 +65,8 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
       {/* Alert Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-all"
-        title="التنبيهات والإشعارات"
+        className="relative p-2 text-white hover:bg-white/20 rounded-lg transition-all"
+        title={t('alertsTitle')}
       >
         <AlertCircle size={24} />
         {unreadCount > 0 && (
@@ -76,12 +78,12 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
 
       {/* Alerts Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[90vw] bg-white rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto">
           {/* Header */}
           <div className="sticky top-0 bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 flex items-center justify-between">
             <h3 className="font-bold flex items-center gap-2">
               <AlertCircle size={20} />
-              التنبيهات والإشعارات
+              {t('alertsTitle')}
             </h3>
             <button
               onClick={() => setIsOpen(false)}
@@ -94,8 +96,8 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
           {/* Alerts List */}
           {alerts.length === 0 ? (
             <div className="p-8 text-center text-slate-600">
-              <p className="text-lg">✨ لا توجد تنبيهات</p>
-              <p className="text-sm mt-2">كل شيء يعمل بشكل طبيعي</p>
+              <p className="text-lg">✨ {t('noAlerts')}</p>
+              <p className="text-sm mt-2">{t('allNormal')}</p>
             </div>
           ) : (
             <div className="divide-y divide-slate-200">
@@ -111,7 +113,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
                     <div className="flex items-center gap-2">
                       <span className="text-xl">{getAlertIcon(alert.type)}</span>
                       <div>
-                        <p className="font-bold text-sm">{alert.title}</p>
+                        <p className="font-bold text-sm">{td(alert.title)}</p>
                         <p className="text-xs opacity-75">{getTimeAgo(alert.timestamp)}</p>
                       </div>
                     </div>
@@ -121,7 +123,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
                   </div>
 
                   {/* Alert Message */}
-                  <p className="text-sm mb-3 ml-8">{alert.message}</p>
+                  <p className="text-sm mb-3 ml-8">{td(alert.message)}</p>
 
                   {/* Alert Actions */}
                   <div className="flex gap-2 ml-8">
@@ -131,7 +133,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
                         className="flex items-center gap-1 text-xs px-2 py-1 bg-white/50 hover:bg-white rounded transition-all"
                       >
                         <Check size={14} />
-                        قراءة
+                        {t('readBtn')}
                       </button>
                     )}
                     {onDismiss && (
@@ -140,7 +142,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
                         className="flex items-center gap-1 text-xs px-2 py-1 bg-white/50 hover:bg-white rounded transition-all"
                       >
                         <X size={14} />
-                        إغلاق
+                        {t('closeBtn')}
                       </button>
                     )}
                     {alert.actionUrl && (
@@ -148,7 +150,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
                         href={alert.actionUrl}
                         className="flex items-center gap-1 text-xs px-2 py-1 bg-white/50 hover:bg-white rounded transition-all"
                       >
-                        عرض →
+                        {t('viewBtn')} →
                       </a>
                     )}
                   </div>
@@ -161,9 +163,9 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts, onMarkAsRead, on
           {alerts.length > 0 && (
             <div className="sticky bottom-0 bg-slate-100 p-3 text-center text-xs text-slate-600 border-t">
               {unreadCount > 0 ? (
-                <p>{unreadCount} تنبيهات غير مقروءة</p>
+                <p>{unreadCount} {t('unreadSuffix')}</p>
               ) : (
-                <p>✓ تمت قراءة جميع التنبيهات</p>
+                <p>✓ {t('allRead')}</p>
               )}
             </div>
           )}

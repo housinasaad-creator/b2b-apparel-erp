@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { ManufacturingOrder, Material, InventoryItem } from '../types';
+import { useI18n } from '../i18n';
 
 interface SmartOrderFormProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
   editingOrder,
   inventory,
 }) => {
-  // معلومات الطلبية الأساسية
+  const { t, td } = useI18n();
   const [productName, setProductName] = useState(editingOrder?.productName || '');
   const [quantity, setQuantity] = useState(editingOrder?.quantity || 0);
   const [unit, setUnit] = useState(editingOrder?.unit || 'قطعة');
@@ -29,39 +30,37 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
   const [currentStage, setCurrentStage] = useState(editingOrder?.currentStage || 'Pending');
   const [progress, setProgress] = useState(editingOrder?.progress || 0);
 
-  // المواد المختارة
   const [selectedMaterials, setSelectedMaterials] = useState<Material[]>(
     editingOrder?.materials || []
   );
 
-  // اختيار مادة جديدة
   const [selectedInventoryId, setSelectedInventoryId] = useState<string>('');
   const [materialQuantity, setMaterialQuantity] = useState(0);
 
-  // حسابات
   const totalRevenue = quantity * pricePerUnit;
   const totalMaterialCost = selectedMaterials.reduce((sum, m) => sum + (m.quantity * 5), 0);
   const profit = totalRevenue - totalMaterialCost;
 
-  // إضافة مادة من المخزون
   const handleAddMaterial = () => {
     if (!selectedInventoryId || materialQuantity <= 0) {
-      alert('يرجى اختيار مادة وإدخال الكمية');
+      alert(t('selectMaterialQtyAlert'));
       return;
     }
 
     const inventoryItem = inventory.find((item) => item.id === selectedInventoryId);
     if (!inventoryItem) return;
 
-    // التحقق من الكمية المتاحة
     if (materialQuantity > inventoryItem.quantity) {
       alert(
-        `الكمية المطلوبة (${materialQuantity} ${inventoryItem.unit}) أكثر من المتاح (${inventoryItem.quantity} ${inventoryItem.unit})`
+        t('qtyMoreThanAvail', {
+          req: materialQuantity,
+          avail: inventoryItem.quantity,
+          unit: td(inventoryItem.unit),
+        })
       );
       return;
     }
 
-    // إضافة المادة
     const newMaterial: Material = {
       id: Date.now().toString(),
       name: inventoryItem.name,
@@ -74,17 +73,15 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
     setMaterialQuantity(0);
   };
 
-  // حذف مادة
   const handleRemoveMaterial = (id: string) => {
     setSelectedMaterials(selectedMaterials.filter((m) => m.id !== id));
   };
 
-  // إرسال الطلبية
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!productName || !quantity || !expectedDate || selectedMaterials.length === 0) {
-      alert('يرجى ملء جميع الحقول واختيار مادة واحدة على الأقل');
+      alert(t('fillAllOrderAlert'));
       return;
     }
 
@@ -127,7 +124,6 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
   if (!isOpen) return null;
 
-  // تجميع المواد حسب الفئة
   const materialsByCategory = inventory.reduce(
     (acc, item) => {
       if (!acc[item.category]) {
@@ -152,8 +148,8 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
         <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl my-8 animate-scaleIn">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-200 sticky top-0 bg-white rounded-t-xl">
-            <h2 className="text-2xl font-bold text-slate-900">
-              ➕ إضافة طلبية جديدة (اختيار ذكي)
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              ➕ {t('smartOrderTitle')}
             </h2>
             <button
               onClick={handleReset}
@@ -169,21 +165,21 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  📝 اسم المنتج *
+                  📝 {t('productNameLabel')} *
                 </label>
                 <input
                   type="text"
                   required
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
-                  placeholder="مثال: قمصان أحمر"
+                  placeholder={t('productNamePh')}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  📊 الكمية المطلوبة *
+                  📊 {t('requiredQty')} *
                 </label>
                 <input
                   type="number"
@@ -197,16 +193,16 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  📦 الوحدة
+                  📦 {t('unitLabel')}
                 </label>
                 <select
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option>قطعة</option>
-                  <option>صندوق</option>
-                  <option>رزمة</option>
+                  <option value="قطعة">{t('unitPiece')}</option>
+                  <option value="صندوق">{t('unitBox')}</option>
+                  <option value="رزمة">{t('unitPack')}</option>
                 </select>
               </div>
             </div>
@@ -215,7 +211,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border-2 border-green-200">
               <div>
                 <label className="block text-sm font-bold text-green-900 mb-2">
-                  💵 سعر البيع للقطعة
+                  💵 {t('sellPricePiece')}
                 </label>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold text-green-600">$</span>
@@ -231,7 +227,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-green-900 mb-2">
-                  💰 الإيراد الإجمالي
+                  💰 {t('totalRevenueLabel')}
                 </label>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold text-green-600">$</span>
@@ -246,7 +242,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-green-900 mb-2">
-                  📈 الربح المتوقع
+                  📈 {t('expectedProfit')}
                 </label>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold text-green-600">$</span>
@@ -264,7 +260,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  📅 تاريخ البدء
+                  📅 {t('startDate')}
                 </label>
                 <input
                   type="date"
@@ -277,7 +273,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  ⏰ التاريخ المتوقع
+                  ⏰ {t('expectedDate')}
                 </label>
                 <input
                   type="date"
@@ -290,19 +286,19 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  🎯 المرحلة
+                  🎯 {t('stageLabel')}
                 </label>
                 <select
                   value={currentStage}
                   onChange={(e) => setCurrentStage(e.target.value as any)}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option value="Pending">قيد الانتظار</option>
-                  <option value="Cutting">القطع</option>
-                  <option value="Sewing">الخياطة</option>
-                  <option value="QA_Inspection">فحص الجودة</option>
-                  <option value="Packaging">التعبئة</option>
-                  <option value="Completed">مكتمل</option>
+                  <option value="Pending">{t('stagePending')}</option>
+                  <option value="Cutting">{t('stageCutting')}</option>
+                  <option value="Sewing">{t('stageSewing')}</option>
+                  <option value="QA_Inspection">{t('stageQA')}</option>
+                  <option value="Packaging">{t('stagePackaging')}</option>
+                  <option value="Completed">{t('stageCompleted')}</option>
                 </select>
               </div>
             </div>
@@ -310,7 +306,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
             {/* Progress */}
             <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200">
               <label className="block text-sm font-bold text-blue-900 mb-3">
-                📊 نسبة التقدم: {progress}%
+                📊 {t('progressLabel')}: {progress}%
               </label>
               <input
                 type="range"
@@ -331,29 +327,29 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
             {/* Smart Materials Selection */}
             <div className="border-t-2 border-slate-300 pt-6">
               <h3 className="text-lg font-bold text-slate-900 mb-4">
-                📦 اختيار المواد من المخزون
+                📦 {t('selectMaterials')}
               </h3>
 
-              {/* Material Selection Dropdown */}
+              {/* Material Selection */}
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
                   {/* Category Select */}
                   <div>
                     <label className="block text-xs font-bold text-purple-900 mb-2">
-                      📂 فئة المادة
+                      📂 {t('materialCategory')}
                     </label>
                     <select
-                      onChange={(e) => {
+                      onChange={() => {
                         setSelectedInventoryId('');
                         setMaterialQuantity(0);
                       }}
                       className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
                       defaultValue=""
                     >
-                      <option value="">-- اختر الفئة --</option>
+                      <option value="">{t('chooseCategory')}</option>
                       {Object.keys(materialsByCategory).map((category) => (
                         <option key={category} value={category}>
-                          {category}
+                          {td(category)}
                         </option>
                       ))}
                     </select>
@@ -362,7 +358,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                   {/* Material Select */}
                   <div>
                     <label className="block text-xs font-bold text-purple-900 mb-2">
-                      🏷️ اسم المادة (المتاح)
+                      🏷️ {t('materialNameAvail')}
                     </label>
                     <select
                       value={selectedInventoryId}
@@ -372,10 +368,10 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                       }}
                       className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
                     >
-                      <option value="">-- اختر المادة --</option>
+                      <option value="">{t('chooseMaterial')}</option>
                       {inventory.map((item) => (
                         <option key={item.id} value={item.id}>
-                          {item.name} ({item.quantity} {item.unit})
+                          {td(item.name)} ({item.quantity} {td(item.unit)})
                         </option>
                       ))}
                     </select>
@@ -384,7 +380,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                   {/* Quantity Input */}
                   <div>
                     <label className="block text-xs font-bold text-purple-900 mb-2">
-                      📊 الكمية المطلوبة
+                      📊 {t('requiredQty')}
                     </label>
                     <div className="flex items-center gap-1">
                       <input
@@ -396,7 +392,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                       />
                       {selectedInventoryId && (
                         <span className="text-xs text-purple-700 font-bold">
-                          {inventory.find((i) => i.id === selectedInventoryId)?.unit}
+                          {td(inventory.find((i) => i.id === selectedInventoryId)?.unit || '')}
                         </span>
                       )}
                     </div>
@@ -410,7 +406,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                       className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-all duration-200 font-bold text-sm flex items-center justify-center gap-2"
                     >
                       <Plus size={16} />
-                      إضافة
+                      {t('add')}
                     </button>
                   </div>
                 </div>
@@ -418,8 +414,8 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                 {/* Info Text */}
                 {selectedInventoryId && (
                   <div className="bg-white rounded p-2 text-xs text-slate-600">
-                    ℹ️ المتاح: {inventory.find((i) => i.id === selectedInventoryId)?.quantity}{' '}
-                    {inventory.find((i) => i.id === selectedInventoryId)?.unit}
+                    ℹ️ {t('available')}: {inventory.find((i) => i.id === selectedInventoryId)?.quantity}{' '}
+                    {td(inventory.find((i) => i.id === selectedInventoryId)?.unit || '')}
                   </div>
                 )}
               </div>
@@ -427,16 +423,16 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
               {/* Selected Materials List */}
               {selectedMaterials.length > 0 && (
                 <div className="space-y-2 mb-4">
-                  <p className="text-sm font-bold text-slate-600">✅ المواد المضافة:</p>
+                  <p className="text-sm font-bold text-slate-600">✅ {t('addedMaterials')}</p>
                   {selectedMaterials.map((material) => (
                     <div
                       key={material.id}
                       className="flex items-center justify-between bg-gradient-to-r from-emerald-100 to-emerald-50 rounded-lg p-4 border-l-4 border-emerald-600"
                     >
                       <div>
-                        <p className="font-semibold text-slate-900">{material.name}</p>
+                        <p className="font-semibold text-slate-900">{td(material.name)}</p>
                         <p className="text-sm text-slate-600">
-                          {material.quantity} {material.unit}
+                          {material.quantity} {td(material.unit)}
                         </p>
                       </div>
                       <button
@@ -453,7 +449,7 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
 
               {selectedMaterials.length === 0 && (
                 <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-4">
-                  <p className="text-red-700 font-bold">⚠️ يجب إضافة مادة واحدة على الأقل!</p>
+                  <p className="text-red-700 font-bold">⚠️ {t('atLeastOneMaterial')}</p>
                 </div>
               )}
             </div>
@@ -465,14 +461,14 @@ export const SmartOrderForm: React.FC<SmartOrderFormProps> = ({
                 disabled={selectedMaterials.length === 0}
                 className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:shadow-lg transition-all duration-200 transform hover:scale-105 font-bold disabled:opacity-50"
               >
-                ✅ إضافة الطلبية
+                ✅ {t('addOrderBtn')}
               </button>
               <button
                 type="button"
                 onClick={handleReset}
                 className="flex-1 bg-slate-200 text-slate-900 py-3 rounded-lg hover:bg-slate-300 transition-all font-bold"
               >
-                ❌ إلغاء
+                ❌ {t('cancel')}
               </button>
             </div>
           </form>

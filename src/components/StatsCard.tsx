@@ -1,5 +1,6 @@
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 interface StatsCardProps {
   title: string;
@@ -18,6 +19,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   color,
   trend,
 }) => {
+  const { t } = useI18n();
   return (
     <div
       className={`bg-gradient-to-br ${color} rounded-xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 cursor-pointer group`}
@@ -42,12 +44,12 @@ export const StatsCard: React.FC<StatsCardProps> = ({
           {trend > 0 ? (
             <>
               <TrendingUp size={16} />
-              <span className="font-semibold">{trend}% نمو</span>
+              <span className="font-semibold">{trend}% {t('growth')}</span>
             </>
           ) : (
             <>
               <TrendingDown size={16} />
-              <span className="font-semibold">{Math.abs(trend)}% انخفاض</span>
+              <span className="font-semibold">{Math.abs(trend)}% {t('decline')}</span>
             </>
           )}
         </div>
