@@ -10,3 +10,5 @@ export { DetailedOrderForm } from './DetailedOrderForm';
 export { SmartOrderForm } from './SmartOrderForm';
 export { AddStockForm } from './AddStockForm';
 export { AlertPanel } from './AlertPanel';
+export { ReportDocument } from './ReportDocument';
+export type { ReportModel } from './ReportDocument';
