@@ -242,7 +242,9 @@ export const Reports: React.FC = () => {
       const imgData = canvas.toDataURL('image/png');
       const wMM = 210;
       const hMM = (canvas.height * wMM) / canvas.width;
-      const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [wMM, hMM] });
+      // Pick orientation matching the content so jsPDF does not swap the page dimensions
+      const orientation = wMM > hMM ? 'landscape' : 'portrait';
+      const pdf = new jsPDF({ orientation, unit: 'mm', format: [wMM, hMM] });
       pdf.addImage(imgData, 'PNG', 0, 0, wMM, hMM);
       pdf.save(`${model.reportNo}.pdf`);
     } finally {
