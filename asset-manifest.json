@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/b2b-apparel-erp/static/css/main.1c36e318.css",
-    "main.js": "/b2b-apparel-erp/static/js/main.566b1680.js",
+    "main.js": "/b2b-apparel-erp/static/js/main.abd9cccd.js",
     "static/js/977.0cd3f59a.chunk.js": "/b2b-apparel-erp/static/js/977.0cd3f59a.chunk.js",
     "static/js/455.68235799.chunk.js": "/b2b-apparel-erp/static/js/455.68235799.chunk.js",
     "static/js/453.ce80c675.chunk.js": "/b2b-apparel-erp/static/js/453.ce80c675.chunk.js",
     "index.html": "/b2b-apparel-erp/index.html",
     "main.1c36e318.css.map": "/b2b-apparel-erp/static/css/main.1c36e318.css.map",
-    "main.566b1680.js.map": "/b2b-apparel-erp/static/js/main.566b1680.js.map",
+    "main.abd9cccd.js.map": "/b2b-apparel-erp/static/js/main.abd9cccd.js.map",
     "977.0cd3f59a.chunk.js.map": "/b2b-apparel-erp/static/js/977.0cd3f59a.chunk.js.map",
     "455.68235799.chunk.js.map": "/b2b-apparel-erp/static/js/455.68235799.chunk.js.map",
     "453.ce80c675.chunk.js.map": "/b2b-apparel-erp/static/js/453.ce80c675.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1c36e318.css",
-    "static/js/main.566b1680.js"
+    "static/js/main.abd9cccd.js"
   ]
 }
