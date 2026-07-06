@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Header, ReportDocument, ReportModel } from '../components';
 import { machines as initialMachines, inventoryItems } from '../data';
 import { BarChart3, Zap, FileDown, Boxes } from 'lucide-react';
@@ -40,6 +40,11 @@ export const Reports: React.FC = () => {
   const reportRef = useRef<HTMLDivElement>(null);
 
   const locale = lang === 'ar' ? 'ar-EG' : lang === 'tr' ? 'tr-TR' : 'en-US';
+
+  // Reset preview when language changes so it never mixes languages
+  useEffect(() => {
+    setModel(null);
+  }, [lang]);
 
   const machineStatus = (s: string) =>
     s === 'Running' ? t('statusRunning') : s === 'Idle' ? t('statusIdle') : t('statusMaintenance');
