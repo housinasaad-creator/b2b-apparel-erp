@@ -45,23 +45,11 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              background: '#ffffff22',
-              borderRadius: 12,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <img
-              src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
-              alt=""
-              style={{ width: 40, height: 40, objectFit: 'contain' }}
-            />
-          </div>
+          <img
+            src={`${process.env.PUBLIC_URL}/weave-badge.png`}
+            alt=""
+            style={{ width: 56, height: 56, objectFit: 'contain', borderRadius: 12 }}
+          />
           <div>
             <div style={{ fontSize: 22, fontWeight: 700 }}>{t('company')}</div>
             <div style={{ fontSize: 13, opacity: 0.9 }}>{t('sidebarSub')}</div>

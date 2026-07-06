@@ -48,13 +48,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
         {/* Logo & Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full mb-4 shadow-2xl border-4 border-amber-400/30">
-            <img
-              src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
-              alt={t('company')}
-              className="w-16 h-16 object-contain"
-            />
-          </div>
+          <img
+            src={`${process.env.PUBLIC_URL}/weave-badge.png`}
+            alt={t('company')}
+            className="inline-block w-24 h-24 object-contain mb-4 rounded-3xl shadow-2xl"
+          />
           <h1 className="text-4xl font-bold text-white mb-2">{t('company')}</h1>
           <p className="text-amber-200 text-lg">🧵 {t('loginSubtitle')}</p>
         </div>

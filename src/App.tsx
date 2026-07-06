@@ -59,13 +59,11 @@ function AppContent() {
           {/* Top Bar with User Info & Alerts */}
           <div className="sticky top-0 z-40 bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-600 text-white px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-2 shadow-lg pl-16 lg:pl-8">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <img
-                  src={`${process.env.PUBLIC_URL}/sewing-machine-white.png`}
-                  alt={t('company')}
-                  className="w-7 h-7 object-contain"
-                />
-              </div>
+              <img
+                src={`${process.env.PUBLIC_URL}/weave-badge.png`}
+                alt={t('company')}
+                className="w-10 h-10 object-contain flex-shrink-0 rounded-lg shadow"
+              />
               <div className="hidden sm:block min-w-0">
                 <p className="text-xs opacity-90">{t('welcomeTo')}</p>
                 <p className="font-bold text-base sm:text-lg truncate">{t('company')}</p>
