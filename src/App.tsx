@@ -57,7 +57,14 @@ function AppContent() {
           {/* Top Bar with User Info & Alerts */}
           <div className="sticky top-0 z-40 bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-600 text-white px-8 py-4 flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-4">
-              <img src="/sewing-machine-logo.png" alt="شركة النسيج الذهبي" className="w-8 h-8" />
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <img
+                  src={`${process.env.PUBLIC_URL}/sewing-machine-logo.png`}
+                  alt="شركة النسيج الذهبي"
+                  className="w-7 h-7 object-contain"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
               <div>
                 <p className="text-xs opacity-90">مرحباً بك في</p>
                 <p className="font-bold text-lg">شركة النسيج الذهبي</p>
@@ -66,7 +73,7 @@ function AppContent() {
                 <p className="text-sm">{user?.name}</p>
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full inline-block">
                   {user?.role === 'admin'
-                    ? '👨‍💼 مدير الأحلام'
+                    ? '👨‍💼 المدير العام'
                     : user?.role === 'manager'
                     ? '📊 مشرف الإنتاج'
                     : '👷 موظف العمليات'}

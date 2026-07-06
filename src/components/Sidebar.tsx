@@ -15,7 +15,7 @@ interface SidebarProps {
 }
 
 const navItems: NavItem[] = [
-  { label: '🎯 لوحة الأحلام', icon: <BarChart3 size={20} />, id: 'dashboard' },
+  { label: '🎯 لوحة التحكم', icon: <BarChart3 size={20} />, id: 'dashboard' },
   { label: '⚡ آلات الخياطة', icon: <Zap size={20} />, id: 'oee' },
   { label: '🧵 خط الخياطة', icon: <Package size={20} />, id: 'manufacturing' },
   { label: '📦 مستودع القماش', icon: <Boxes size={20} />, id: 'inventory' },
@@ -47,14 +47,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onNavigate }) => {
         }`}
       >
         {/* Logo Section */}
-        <div className="p-6 border-b border-purple-500/30 bg-gradient-to-r from-pink-600/10 to-purple-600/10">
+        <div className="p-6 border-b border-amber-500/30 bg-gradient-to-r from-amber-600/10 to-yellow-600/10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-2xl">✨</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
+              <img
+                src={`${process.env.PUBLIC_URL}/sewing-machine-logo.png`}
+                alt="شركة النسيج الذهبي"
+                className="w-9 h-9 object-contain"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
             </div>
             <div>
-              <h1 className="text-xl font-bold">مشغل الأحلام</h1>
-              <p className="text-xs text-slate-400">🧵 مصنع الخياطة</p>
+              <h1 className="text-xl font-bold">شركة النسيج الذهبي</h1>
+              <p className="text-xs text-slate-400">🧵 الإنتاج الذكي</p>
             </div>
           </div>
         </div>
@@ -81,8 +86,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onNavigate }) => {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-700 text-sm text-slate-400">
-          <p>© 2024 مشغل الأحلام</p>
+        <div className="p-4 border-t border-amber-500/30 text-sm text-slate-400">
+          <p>© 2024 شركة النسيج الذهبي</p>
           <p>نسخة 2.1 ✨</p>
         </div>
       </aside>

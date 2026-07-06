@@ -37,15 +37,20 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo & Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-2xl">
-            <span className="text-5xl">✨</span>
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full mb-4 shadow-2xl border-4 border-amber-400/30">
+            <img
+              src={`${process.env.PUBLIC_URL}/sewing-machine-logo.png`}
+              alt="شركة النسيج الذهبي"
+              className="w-16 h-16 object-contain"
+              style={{ filter: 'brightness(0) invert(1)' }}
+            />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">مشغل الأحلام</h1>
-          <p className="text-pink-100 text-lg">🧵 مصنع الخياطة والتفصيل</p>
+          <h1 className="text-4xl font-bold text-white mb-2">شركة النسيج الذهبي</h1>
+          <p className="text-amber-200 text-lg">🧵 نظام إدارة الإنتاج المتقدم</p>
         </div>
 
         {/* Login Form */}
@@ -90,9 +95,9 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg transition-all active:scale-95"
+              className="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-600 text-white font-bold rounded-lg hover:shadow-lg transition-all active:scale-95"
             >
-              ✨ دخول الأحلام
+              ✨ دخول النظام
             </button>
           </form>
 
@@ -113,7 +118,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               onClick={() => handleQuickLogin('admin', '0000')}
               className="w-full py-2 px-4 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-100 transition-all font-bold text-sm"
             >
-              👨‍💼 مدير الأحلام (Admin)
+              👨‍💼 المدير العام (Admin)
             </button>
             <button
               type="button"
@@ -143,7 +148,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             {showCredentials && (
               <div className="mt-3 p-4 bg-slate-50 rounded-lg text-xs space-y-2 text-slate-700">
                 <div>
-                  <strong>👨‍💼 مدير الأحلام:</strong>
+                  <strong>👨‍💼 المدير العام:</strong>
                   <br />
                   اسم المستخدم: admin
                   <br />
@@ -175,8 +180,8 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-8 text-center text-pink-100 text-sm">
-          <p>✨ مشغل الأحلام للخياطة والتفصيل</p>
+        <div className="mt-8 text-center text-amber-200 text-sm">
+          <p>✨ شركة النسيج الذهبي</p>
           <p>🧵 نظام إدارة محترف وآمن</p>
         </div>
       </div>

@@ -19,7 +19,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f1f5f9;
+  background-color: #0b1120;
+  color: #e2e8f0;
   direction: rtl;
 }
 
@@ -27,3 +28,141 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ============================================================
+   الثيم الغامق الشامل — شركة النسيج الذهبي (Dark Mode Global)
+   يحوّل كل الخلفيات والنصوص الفاتحة إلى غامقة تلقائياً
+   ============================================================ */
+
+/* --- خلفيات الصفحة والحاويات --- */
+.bg-slate-100,
+.bg-gray-100,
+.bg-slate-200,
+.bg-gray-200 {
+  background-color: #0b1120 !important;
+}
+
+.bg-slate-50,
+.bg-gray-50 {
+  background-color: #1e293b !important;
+}
+
+/* --- الكروت البيضاء --- */
+.bg-white {
+  background-color: #1e293b !important;
+  color: #e2e8f0;
+}
+
+/* --- الحقول (inputs / textarea / select) --- */
+input,
+textarea,
+select {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* --- النصوص الغامقة تصير فاتحة --- */
+.text-slate-900,
+.text-slate-800,
+.text-slate-700,
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
+.text-black {
+  color: #e2e8f0 !important;
+}
+
+.text-slate-600,
+.text-slate-500,
+.text-gray-600,
+.text-gray-500,
+.text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* --- تحويل تدرّجات الكروت الفاتحة (from/to -50 و -100) إلى غامقة ملوّنة --- */
+.from-blue-50,
+.from-blue-100 { --tw-gradient-from: #12233f var(--tw-gradient-from-position) !important; }
+.to-blue-50,
+.to-blue-100 { --tw-gradient-to: #1a3160 var(--tw-gradient-to-position) !important; }
+
+.from-red-50,
+.from-red-100 { --tw-gradient-from: #3a1518 var(--tw-gradient-from-position) !important; }
+.to-red-50,
+.to-red-100 { --tw-gradient-to: #4a1c22 var(--tw-gradient-to-position) !important; }
+
+.from-green-50,
+.from-green-100 { --tw-gradient-from: #0f2e20 var(--tw-gradient-from-position) !important; }
+.to-green-50,
+.to-green-100 { --tw-gradient-to: #14402c var(--tw-gradient-to-position) !important; }
+
+.from-emerald-50,
+.from-emerald-100 { --tw-gradient-from: #0d2e22 var(--tw-gradient-from-position) !important; }
+.to-emerald-50,
+.to-emerald-100 { --tw-gradient-to: #10402e var(--tw-gradient-to-position) !important; }
+
+.from-orange-50,
+.from-orange-100 { --tw-gradient-from: #3a2411 var(--tw-gradient-from-position) !important; }
+.to-orange-50,
+.to-orange-100 { --tw-gradient-to: #4a2f14 var(--tw-gradient-to-position) !important; }
+
+.from-amber-50,
+.from-amber-100 { --tw-gradient-from: #3a2c0f var(--tw-gradient-from-position) !important; }
+.to-amber-50,
+.to-amber-100 { --tw-gradient-to: #4a3813 var(--tw-gradient-to-position) !important; }
+
+.from-yellow-50,
+.from-yellow-100 { --tw-gradient-from: #3a3410 var(--tw-gradient-from-position) !important; }
+.to-yellow-50,
+.to-yellow-100 { --tw-gradient-to: #4a4314 var(--tw-gradient-to-position) !important; }
+
+.from-purple-50,
+.from-purple-100 { --tw-gradient-from: #2a1a3f var(--tw-gradient-from-position) !important; }
+.to-purple-50,
+.to-purple-100 { --tw-gradient-to: #351f52 var(--tw-gradient-to-position) !important; }
+
+.from-pink-50,
+.from-pink-100 { --tw-gradient-from: #3a1528 var(--tw-gradient-from-position) !important; }
+.to-pink-50,
+.to-pink-100 { --tw-gradient-to: #4a1c33 var(--tw-gradient-to-position) !important; }
+
+.from-indigo-50,
+.from-indigo-100 { --tw-gradient-from: #1a1f4a var(--tw-gradient-from-position) !important; }
+.to-indigo-50,
+.to-indigo-100 { --tw-gradient-to: #22285c var(--tw-gradient-to-position) !important; }
+
+/* --- خلفيات فاتحة صلبة (-50) للكروت --- */
+.bg-blue-50 { background-color: #12233f !important; }
+.bg-red-50 { background-color: #3a1518 !important; }
+.bg-green-50 { background-color: #0f2e20 !important; }
+.bg-emerald-50 { background-color: #0d2e22 !important; }
+.bg-orange-50 { background-color: #3a2411 !important; }
+.bg-amber-50 { background-color: #3a2c0f !important; }
+.bg-yellow-50 { background-color: #3a3410 !important; }
+.bg-purple-50 { background-color: #2a1a3f !important; }
+.bg-pink-50 { background-color: #3a1528 !important; }
+.bg-indigo-50 { background-color: #1a1f4a !important; }
+
+/* --- النصوص الملوّنة الغامقة داخل الكروت تصير فاتحة عشان تبان --- */
+.text-blue-900, .text-blue-800 { color: #93c5fd !important; }
+.text-red-900, .text-red-800 { color: #fca5a5 !important; }
+.text-green-900, .text-green-800 { color: #86efac !important; }
+.text-emerald-900, .text-emerald-800 { color: #6ee7b7 !important; }
+.text-orange-900, .text-orange-800 { color: #fdba74 !important; }
+.text-amber-900, .text-amber-800 { color: #fcd34d !important; }
+.text-yellow-900, .text-yellow-800 { color: #fde047 !important; }
+.text-purple-900, .text-purple-800 { color: #d8b4fe !important; }
+.text-pink-900, .text-pink-800 { color: #f9a8d4 !important; }
+.text-indigo-900, .text-indigo-800 { color: #a5b4fc !important; }
+
+/* --- شريط التمرير الغامق --- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }

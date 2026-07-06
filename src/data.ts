@@ -319,11 +319,11 @@ export const purchaseOrders: PurchaseOrder[] = [
   },
 ];
 
-// Users Database - مشغل الأحلام للخياطة
+// Users Database - شركة النسيج الذهبي
 export const users: User[] = [
   {
     id: '1',
-    name: 'مدير الأحلام',
+    name: 'المدير العام',
     email: 'admin',
     password: '0000',
     role: 'admin',

@@ -16,7 +16,7 @@ export const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>([
     {
       id: '1',
-      name: 'مدير الأحلام',
+      name: 'المدير العام',
       email: 'admin',
       password: '0000',
       role: 'admin',
@@ -116,7 +116,7 @@ export const UserManagement: React.FC = () => {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'مدير الأحلام';
+        return 'المدير العام';
       case 'manager':
         return 'مشرف الإنتاج';
       case 'staff':
@@ -301,7 +301,7 @@ export const UserManagement: React.FC = () => {
               >
                 <option value="staff">👷 موظف العمليات</option>
                 <option value="manager">📊 مشرف الإنتاج</option>
-                <option value="admin">👨‍💼 مدير الأحلام</option>
+                <option value="admin">👨‍💼 المدير العام</option>
               </select>
             </div>
 
