@@ -11,7 +11,7 @@ type PageType = 'dashboard' | 'oee' | 'manufacturing' | 'inventory' | 'settings'
 
 function AppContent() {
   const { isLoggedIn, user } = useAuth();
-  const { t } = useI18n();
+  const { t, td } = useI18n();
   const [activePage, setActivePage] = useState<PageType>('dashboard');
   const [alerts, setAlerts] = useState<Notification[]>(initialAlerts);
 
@@ -71,7 +71,7 @@ function AppContent() {
                 <p className="font-bold text-base sm:text-lg truncate">{t('company')}</p>
               </div>
               <div className="border-r border-white/30 pr-3 min-w-0">
-                <p className="text-sm truncate">{user?.name}</p>
+                <p className="text-sm truncate">{td(user?.name || '')}</p>
                 <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full inline-block whitespace-nowrap">
                   {user?.role === 'admin'
                     ? `👨‍💼 ${t('roleAdmin')}`
