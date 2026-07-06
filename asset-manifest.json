@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/b2b-apparel-erp/static/css/main.28db592e.css",
-    "main.js": "/b2b-apparel-erp/static/js/main.c5bfd15c.js",
+    "main.css": "/b2b-apparel-erp/static/css/main.fa2eeabf.css",
+    "main.js": "/b2b-apparel-erp/static/js/main.ab13cece.js",
     "static/js/453.eafc85e0.chunk.js": "/b2b-apparel-erp/static/js/453.eafc85e0.chunk.js",
     "index.html": "/b2b-apparel-erp/index.html",
-    "main.28db592e.css.map": "/b2b-apparel-erp/static/css/main.28db592e.css.map",
-    "main.c5bfd15c.js.map": "/b2b-apparel-erp/static/js/main.c5bfd15c.js.map",
+    "main.fa2eeabf.css.map": "/b2b-apparel-erp/static/css/main.fa2eeabf.css.map",
+    "main.ab13cece.js.map": "/b2b-apparel-erp/static/js/main.ab13cece.js.map",
     "453.eafc85e0.chunk.js.map": "/b2b-apparel-erp/static/js/453.eafc85e0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.28db592e.css",
-    "static/js/main.c5bfd15c.js"
+    "static/css/main.fa2eeabf.css",
+    "static/js/main.ab13cece.js"
   ]
 }
