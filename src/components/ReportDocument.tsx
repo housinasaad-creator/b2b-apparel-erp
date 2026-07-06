@@ -19,15 +19,16 @@ interface Props {
 export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }, ref) => {
   const { t, lang } = useI18n();
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
-  const align = lang === 'ar' ? 'right' : 'left';
+  const align = (lang === 'ar' ? 'right' : 'left') as 'right' | 'left';
 
   return (
     <div
       ref={ref}
+      id="pdf-report-root"
       dir={dir}
       style={{
         width: 794,
-        background: '#ffffff',
+        backgroundColor: '#ffffff',
         color: '#0f172a',
         colorScheme: 'light',
         fontFamily: "'Segoe UI', Tahoma, Arial, sans-serif",
@@ -37,7 +38,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
       {/* Header band */}
       <div
         style={{
-          background: '#b45309',
+          backgroundColor: '#b45309',
           color: '#ffffff',
           padding: '24px 32px',
           display: 'flex',
@@ -49,14 +50,16 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
           <img
             src={`${process.env.PUBLIC_URL}/weave-badge.png`}
             alt=""
-            style={{ width: 56, height: 56, objectFit: 'contain', borderRadius: 12 }}
+            width={52}
+            height={52}
+            style={{ width: 52, height: 52, display: 'block', borderRadius: 12 }}
           />
           <div>
             <div style={{ fontSize: 22, fontWeight: 700 }}>{t('company')}</div>
             <div style={{ fontSize: 13, opacity: 0.9 }}>{t('sidebarSub')}</div>
           </div>
         </div>
-        <div style={{ textAlign: align as any }}>
+        <div style={{ textAlign: align }}>
           <div style={{ fontSize: 18, fontWeight: 700 }}>{model.docTitle}</div>
           <div style={{ fontSize: 12, opacity: 0.9 }}>
             {t('repReportNo')}: {model.reportNo}
@@ -71,7 +74,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
           justifyContent: 'space-between',
           gap: 12,
           padding: '14px 32px',
-          background: '#f8fafc',
+          backgroundColor: '#f1f5f9',
           borderBottom: '2px solid #e2e8f0',
           fontSize: 13,
           flexWrap: 'wrap',
@@ -91,7 +94,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
         </div>
       </div>
 
-      <div style={{ padding: '24px 32px' }}>
+      <div style={{ padding: '24px 32px', backgroundColor: '#ffffff' }}>
         {/* Executive Summary */}
         <div
           style={{
@@ -117,7 +120,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
             <div
               key={i}
               style={{
-                background: '#f8fafc',
+                backgroundColor: '#f8fafc',
                 border: '1px solid #e2e8f0',
                 borderTop: `4px solid ${s.accent}`,
                 borderRadius: 8,
@@ -149,14 +152,15 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
         </div>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
-            <tr style={{ background: '#1e293b', color: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#1e293b' }}>
               {model.columns.map((c, i) => (
                 <th
                   key={i}
                   style={{
                     padding: '10px 12px',
-                    textAlign: align as any,
+                    textAlign: align,
                     fontWeight: 700,
+                    color: '#ffffff',
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -170,7 +174,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
               <tr
                 key={ri}
                 style={{
-                  background: ri % 2 === 0 ? '#ffffff' : '#f8fafc',
+                  backgroundColor: ri % 2 === 0 ? '#ffffff' : '#f8fafc',
                   borderBottom: '1px solid #e2e8f0',
                 }}
               >
@@ -179,7 +183,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
                     key={ci}
                     style={{
                       padding: '9px 12px',
-                      textAlign: align as any,
+                      textAlign: align,
                       color: ci === 0 ? '#0f172a' : '#334155',
                       fontWeight: ci === 0 ? 700 : 400,
                       whiteSpace: 'nowrap',
@@ -198,8 +202,8 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
           <div
             style={{
               marginTop: 24,
-              background: '#fffbeb',
-              borderInlineStart: '4px solid #f59e0b',
+              backgroundColor: '#fffbeb',
+              borderLeft: '4px solid #f59e0b',
               borderRadius: 6,
               padding: '12px 16px',
             }}
@@ -224,6 +228,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
           color: '#94a3b8',
           flexWrap: 'wrap',
           gap: 8,
+          backgroundColor: '#ffffff',
         }}
       >
         <span>{t('repConfidential')}</span>
