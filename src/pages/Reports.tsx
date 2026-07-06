@@ -100,8 +100,8 @@ export const Reports: React.FC = () => {
       summary: [
         { label: t('totalProductionLabel'), value: td('1,289,000 قطعة'), accent: '#7c3aed' },
         { label: t('avgOEELabel'), value: '81%', accent: '#2563eb' },
-        { label: t('bestMachineLabel'), value: `${td('ماكينة القص - 1')} (87%)`, accent: '#16a34a' },
-        { label: t('worstMachineLabel'), value: `${td('ماكينة الخياطة - 2')} (70%)`, accent: '#dc2626' },
+        { label: `${t('bestMachineLabel')} · ${td('ماكينة القص - 1')}`, value: '87%', accent: '#16a34a' },
+        { label: `${t('worstMachineLabel')} · ${td('ماكينة الخياطة - 2')}`, value: '70%', accent: '#dc2626' },
         { label: t('maintCountLabel'), value: '18', accent: '#ea580c' },
         { label: t('totalDowntimeLabel'), value: td('580 دقيقة'), accent: '#0891b2' },
       ],
@@ -195,31 +195,58 @@ export const Reports: React.FC = () => {
   const handleDownloadPdf = async () => {
     if (!reportRef.current || !model) return;
     setBusy(true);
+    // Render inside an isolated iframe (no app dark theme) so the document stays white
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.left = '-10000px';
+    iframe.style.top = '0';
+    iframe.style.width = '820px';
+    iframe.style.height = '3000px';
+    iframe.style.border = '0';
+    document.body.appendChild(iframe);
     try {
-      const canvas = await html2canvas(reportRef.current, {
+      const idoc = iframe.contentDocument!;
+      idoc.open();
+      idoc.write(
+        `<!DOCTYPE html><html dir="${lang === 'ar' ? 'rtl' : 'ltr'}"><head><meta charset="utf-8">` +
+        `<style>*{margin:0;padding:0;box-sizing:border-box}html,body{background:#ffffff}</style>` +
+        `</head><body></body></html>`
+      );
+      idoc.close();
+
+      const clone = reportRef.current.cloneNode(true) as HTMLElement;
+      idoc.body.appendChild(clone);
+
+      // Wait for the logo image inside the clone to load
+      await new Promise<void>((resolve) => {
+        const imgs = Array.from(clone.querySelectorAll('img'));
+        if (imgs.length === 0) return resolve();
+        let left = imgs.length;
+        const done = () => { if (--left <= 0) resolve(); };
+        imgs.forEach((im) => {
+          if ((im as HTMLImageElement).complete) done();
+          else {
+            im.addEventListener('load', done);
+            im.addEventListener('error', done);
+          }
+        });
+        setTimeout(resolve, 1500);
+      });
+
+      const canvas = await html2canvas(clone, {
         scale: 2,
         backgroundColor: '#ffffff',
         useCORS: true,
         logging: false,
       });
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const imgW = pageW;
-      const imgH = (canvas.height * imgW) / canvas.width;
-      let heightLeft = imgH;
-      let position = 0;
-      pdf.addImage(imgData, 'PNG', 0, position, imgW, imgH);
-      heightLeft -= pageH;
-      while (heightLeft > 0) {
-        position -= pageH;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgW, imgH);
-        heightLeft -= pageH;
-      }
+      const wMM = 210;
+      const hMM = (canvas.height * wMM) / canvas.width;
+      const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [wMM, hMM] });
+      pdf.addImage(imgData, 'PNG', 0, 0, wMM, hMM);
       pdf.save(`${model.reportNo}.pdf`);
     } finally {
+      document.body.removeChild(iframe);
       setBusy(false);
     }
   };

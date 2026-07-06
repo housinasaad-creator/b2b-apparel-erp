@@ -29,6 +29,7 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
         width: 794,
         background: '#ffffff',
         color: '#0f172a',
+        colorScheme: 'light',
         fontFamily: "'Segoe UI', Tahoma, Arial, sans-serif",
         boxSizing: 'border-box',
       }}
@@ -121,10 +122,14 @@ export const ReportDocument = React.forwardRef<HTMLDivElement, Props>(({ model }
                 borderTop: `4px solid ${s.accent}`,
                 borderRadius: 8,
                 padding: '12px 14px',
+                minHeight: 76,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
               }}
             >
-              <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>{s.label}</div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#0f172a' }}>{s.value}</div>
+              <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6, lineHeight: 1.3 }}>{s.label}</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: '#0f172a', lineHeight: 1.25 }}>{s.value}</div>
             </div>
           ))}
         </div>
