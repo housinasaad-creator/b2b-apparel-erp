@@ -208,8 +208,11 @@ export const Reports: React.FC = () => {
       const idoc = iframe.contentDocument!;
       idoc.open();
       idoc.write(
-        `<!DOCTYPE html><html dir="${lang === 'ar' ? 'rtl' : 'ltr'}"><head><meta charset="utf-8">` +
-        `<style>*{margin:0;padding:0;box-sizing:border-box}html,body{background:#ffffff}</style>` +
+        `<!DOCTYPE html><html dir="${lang === 'ar' ? 'rtl' : 'ltr'}" style="color-scheme:only light">` +
+        `<head><meta charset="utf-8">` +
+        `<meta name="color-scheme" content="light">` +
+        `<meta name="darkreader-lock">` +
+        `<style>*{margin:0;padding:0;box-sizing:border-box}html,body{background:#ffffff;color-scheme:only light}</style>` +
         `</head><body></body></html>`
       );
       idoc.close();
